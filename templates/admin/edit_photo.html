@@ -1,0 +1,68 @@
+{% extends "admin/layout.html" %}
+
+{% block title %}Edit Foto{% endblock %}
+{% block header %}Edit Foto{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <div class="current-image">
+        <h3>Gambar Saat Ini</h3>
+        <img src="{{ url_for('static', filename='uploads/' + photo.filename) }}" alt="{{ photo.title }}">
+    </div>
+    
+    <form action="{{ url_for('edit_photo', photo_id=photo.id) }}" method="post" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="title">Judul Foto</label>
+            <input type="text" id="title" name="title" value="{{ photo.title }}" required>
+        </div>
+        <div class="form-group">
+            <label for="category">Kategori</label>
+            <input type="text" id="category" name="category" list="categories" value="{{ photo.category }}" required>
+            <datalist id="categories">
+                {% for category in categories %}
+                    <option value="{{ category }}">
+                {% endfor %}
+            </datalist>
+        </div>
+        <div class="form-group">
+            <label for="description">Deskripsi</label>
+            <textarea id="description" name="description" rows="5">{{ photo.description }}</textarea>
+        </div>
+        <div class="form-group">
+            <label for="photo">Ganti Foto (opsional)</label>
+            <input type="file" id="photo" name="photo" accept=".jpg, .jpeg, .png, .gif">
+            <div id="image-preview"></div>
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn-submit">Simpan Perubahan</button>
+            <a href="{{ url_for('admin_dashboard') }}" class="btn-cancel">Batal</a>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const photoInput = document.getElementById('photo');
+        const imagePreview = document.getElementById('image-preview');
+        
+        photoInput.addEventListener('change', function() {
+            imagePreview.innerHTML = '';
+            
+            if (this.files && this.files[0]) {
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.className = 'preview-image';
+                    imagePreview.appendChild(img);
+                }
+                
+                reader.readAsDataURL(this.files[0]);
+            }
+        });
+    });
+</script>
+{% endblock %}

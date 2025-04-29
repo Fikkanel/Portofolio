@@ -1,0 +1,28 @@
+{% extends "admin/layout.html" %}
+
+{% block title %}Tambah Video{% endblock %}
+{% block header %}Tambah Video Baru{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <form action="{{ url_for('add_video') }}" method="post">
+        <div class="form-group">
+            <label for="title">Judul Video</label>
+            <input type="text" id="title" name="title" required>
+        </div>
+        <div class="form-group">
+            <label for="embed_url">URL YouTube</label>
+            <input type="text" id="embed_url" name="embed_url" required>
+            <small>Masukkan URL video YouTube (contoh: https://www.youtube.com/watch?v=VIDEO_ID atau https://youtu.be/VIDEO_ID)</small>
+        </div>
+        <div class="form-group">
+            <label for="description">Deskripsi</label>
+            <textarea id="description" name="description" rows="5"></textarea>
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn-submit">Simpan Video</button>
+            <a href="{{ url_for('admin_dashboard') }}" class="btn-cancel">Batal</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

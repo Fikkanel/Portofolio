@@ -1,0 +1,187 @@
+{% extends "admin/layout.html" %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+<div class="dashboard">
+    <div class="dashboard-cards">
+        <div class="card">
+            <div class="card-icon">
+                <i class="fas fa-video"></i>
+            </div>
+            <div class="card-info">
+                <h3>Video</h3>
+                <p>{{ videos|length }} video</p>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-icon">
+                <i class="fas fa-image"></i>
+            </div>
+            <div class="card-info">
+                <h3>Foto</h3>
+                <p>{{ photos|length }} foto</p>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-icon">
+                <i class="fas fa-envelope"></i>
+            </div>
+            <div class="card-info">
+                <h3>Pesan</h3>
+                <p>{{ messages|length }} pesan</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="data-section">
+        <div class="data-tabs">
+            <button class="tab-btn active" data-tab="videos">Video</button>
+            <button class="tab-btn" data-tab="photos">Foto</button>
+            <button class="tab-btn" data-tab="messages">Pesan</button>
+        </div>
+        
+        <div class="tab-content" id="videos">
+            <h2>Daftar Video</h2>
+            {% if videos %}
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Judul</th>
+                                <th>Deskripsi</th>
+                                <th>Tanggal Ditambahkan</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for video in videos %}
+                                <tr>
+                                    <td>{{ video.id }}</td>
+                                    <td>{{ video.title }}</td>
+                                    <td>{{ video.description|truncate(50) }}</td>
+                                    <td>{{ video.date_added }}</td>
+                                    <td class="actions">
+                                        <a href="{{ url_for('edit_video', video_id=video.id) }}" class="btn-edit"><i class="fas fa-edit"></i></a>
+                                        <a href="{{ url_for('delete_video', video_id=video.id) }}" class="btn-delete" onclick="return confirm('Yakin ingin menghapus video ini?');"><i class="fas fa-trash"></i></a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <p class="no-data">Belum ada video.</p>
+            {% endif %}
+        </div>
+        
+        <div class="tab-content" id="photos" style="display: none;">
+            <h2>Daftar Foto</h2>
+            {% if photos %}
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Gambar</th>
+                                <th>Judul</th>
+                                <th>Kategori</th>
+                                <th>Tanggal Ditambahkan</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for photo in photos %}
+                                <tr>
+                                    <td>{{ photo.id }}</td>
+                                    <td><img src="{{ url_for('static', filename='uploads/' + photo.filename) }}" alt="{{ photo.title }}" class="thumbnail"></td>
+                                    <td>{{ photo.title }}</td>
+                                    <td>{{ photo.category }}</td>
+                                    <td>{{ photo.date_added }}</td>
+                                    <td class="actions">
+                                        <a href="{{ url_for('edit_photo', photo_id=photo.id) }}" class="btn-edit"><i class="fas fa-edit"></i></a>
+                                        <a href="{{ url_for('delete_photo', photo_id=photo.id) }}" class="btn-delete" onclick="return confirm('Yakin ingin menghapus foto ini?');"><i class="fas fa-trash"></i></a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <p class="no-data">Belum ada foto.</p>
+            {% endif %}
+        </div>
+        
+        <div class="tab-content" id="messages" style="display: none;">
+            <h2>Daftar Pesan</h2>
+            {% if messages %}
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Nama</th>
+                                <th>Email</th>
+                                <th>Subjek</th>
+                                <th>Pesan</th>
+                                <th>Tanggal</th>
+                                <th>Status</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for message in messages %}
+                                <tr {% if not message.read %}class="unread"{% endif %}>
+                                    <td>{{ message.name }}</td>
+                                    <td>{{ message.email }}</td>
+                                    <td>{{ message.subject }}</td>
+                                    <td>{{ message.message|truncate(50) }}</td>
+                                    <td>{{ message.date }}</td>
+                                    <td>{{ "Sudah Dibaca" if message.read else "Belum Dibaca" }}</td>
+                                    <td class="actions">
+                                        {% if not message.read %}
+                                            <a href="{{ url_for('mark_message_read', message_index=loop.index0) }}" class="btn-mark-read"><i class="fas fa-envelope-open"></i></a>
+                                        {% endif %}
+                                        <a href="{{ url_for('delete_message', message_index=loop.index0) }}" class="btn-delete" onclick="return confirm('Yakin ingin menghapus pesan ini?');"><i class="fas fa-trash"></i></a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <p class="no-data">Belum ada pesan.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const tabButtons = document.querySelectorAll('.tab-btn');
+        const tabContents = document.querySelectorAll('.tab-content');
+        
+        tabButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const tabName = this.getAttribute('data-tab');
+                
+                // Hapus class active dari semua button
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                
+                // Tambahkan class active ke button yang diklik
+                this.classList.add('active');
+                
+                // Sembunyikan semua tab content
+                tabContents.forEach(content => {
+                    content.style.display = 'none';
+                });
+                
+                // Tampilkan tab content yang dipilih
+                document.getElementById(tabName).style.display = 'block';
+            });
+        });
+    });
+</script>
+{% endblock %}

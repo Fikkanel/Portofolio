@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portofolio Saya</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <h1>Portofolio Saya</h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#home">Beranda</a></li>
+                    <li><a href="#about">Tentang</a></li>
+                    <li><a href="#videos">Video</a></li>
+                    <li><a href="#photos">Foto</a></li>
+                    <li><a href="#contact">Kontak</a></li>
+                </ul>
+            </nav>
+            <div class="menu-toggle">
+                <i class="fas fa-bars"></i>
+            </div>
+        </div>
+    </header>
+
+    <section id="home" class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Selamat Datang di Portofolio Saya</h1>
+                <p>Temukan kreasi dan karya terbaik saya di sini</p>
+                <a href="#about" class="btn">Pelajari Lebih Lanjut</a>
+            </div>
+        </div>
+    </section>
+
+    <section id="about" class="about">
+        <div class="container">
+            <div class="section-header">
+                <h2>Tentang Saya</h2>
+                <div class="underline"></div>
+            </div>
+            <div class="about-content">
+                <div class="about-img">
+                    <img src="{{ url_for('static', filename='img/profile.jpg') }}" alt="Foto Profil">
+                </div>
+                <div class="about-text">
+                    <h3>Halo, Saya <span id="name">Fikkan</span></h3>
+                    <p>Saya adalah pribadi yang selalu haus akan pengalaman baru, dengan semangat petualangan yang tak pernah padam untuk menjelajahi berbagai aspek kehidupan. Dengan pikiran yang terbuka dan rasa ingin tahu yang tinggi, saya selalu siap melangkah keluar dari zona nyaman untuk merasakan sensasi baru, mempelajari keterampilan yang belum dikuasai, atau mengeksplorasi tempat-tempat yang belum pernah dikunjungi. Keinginan untuk terus berkembang mendorong saya untuk tidak pernah takut menghadapi tantangan baru, karena bagi saya, setiap pengalaman adalah kesempatan berharga untuk tumbuh dan memperkaya perjalanan hidup.</p>
+                    <div class="skills">
+                        <h4>Keahlian Saya:</h4>
+                        <div class="skill-items">
+                            <div class="skill-item">Fotografi</div>
+                            <div class="skill-item">Videografi</div>
+                            <div class="skill-item">Editing</div>
+                            <div class="skill-item">Desain</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="videos" class="videos">
+        <div class="container">
+            <div class="section-header">
+                <h2>Video Saya</h2>
+                <div class="underline"></div>
+            </div>
+            <div class="videos-grid">
+                {% for video in videos %}
+                <div class="video-item">
+                    <div class="video-thumbnail">
+                        <iframe width="100%" height="200" src="{{ video.embed_url }}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                    <div class="video-info">
+                        <h3>{{ video.title }}</h3>
+                        <p>{{ video.description }}</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% if is_logged_in %}
+            <div class="add-item">
+                <a href="/add-video" class="btn">Tambah Video Baru</a>
+            </div>
+            {% endif %}
+        </div>
+    </section>
+
+    <section id="photos" class="photos">
+        <div class="container">
+            <div class="section-header">
+                <h2>Foto Saya</h2>
+                <div class="underline"></div>
+            </div>
+            <div class="filter-buttons">
+                <button class="filter-btn active" data-filter="all">Semua</button>
+                {% for category in photo_categories %}
+                <button class="filter-btn" data-filter="{{ category }}">{{ category }}</button>
+                {% endfor %}
+            </div>
+            <div class="photos-grid">
+                {% for photo in photos %}
+                <div class="photo-item" data-category="{{ photo.category }}">
+                    <img src="{{ url_for('static', filename='uploads/' + photo.filename) }}" alt="{{ photo.title }}">
+                    <div class="photo-overlay">
+                        <h3>{{ photo.title }}</h3>
+                        <p>{{ photo.description }}</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% if is_logged_in %}
+            <div class="add-item">
+                <a href="/add-photo" class="btn">Tambah Foto Baru</a>
+            </div>
+            {% endif %}
+        </div>
+    </section>
+
+    <section id="contact" class="contact">
+        <div class="container">
+            <div class="section-header">
+                <h2>Hubungi Saya</h2>
+                <div class="underline"></div>
+            </div>
+            <div class="contact-content">
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <i class="fas fa-envelope"></i>
+                        <h3>Email</h3>
+                        <p>mfikkanel@gmail.com</p>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-phone"></i>
+                        <h3>Telepon</h3>
+                        <p>+62 822-6105-0373</p>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <h3>Lokasi</h3>
+                        <p>Surabaya Indonesia</p>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-share-alt"></i>
+                        <h3>Media Sosial</h3>
+                        <div class="social-links">
+                            <a href="https://www.instagram.com/mfikkann/"><i class="fab fa-instagram"></i></a>
+                            <a href="#"><i class="fab fa-youtube"></i></a>
+                            <a href="#"><i class="fab fa-facebook"></i></a>
+                            <a href="#"><i class="fab fa-twitter"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="contact-form">
+                    <form action="/send-message" method="post">
+                        <div class="form-group">
+                            <input type="text" name="name" placeholder="Nama Anda" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="email" name="email" placeholder="Email Anda" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" name="subject" placeholder="Subjek" required>
+                        </div>
+                        <div class="form-group">
+                            <textarea name="message" placeholder="Pesan Anda" required></textarea>
+                        </div>
+                        <button type="submit" class="btn">Kirim Pesan</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Portofolio Saya. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

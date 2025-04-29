@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>500 - Server Error</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .error-container {
+            text-align: center;
+            padding: 100px 20px;
+            min-height: 70vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .error-code {
+            font-size: 150px;
+            font-weight: bold;
+            color: #dc3545;
+            margin: 0;
+            line-height: 1;
+        }
+        
+        .error-message {
+            font-size: 24px;
+            margin: 20px 0;
+        }
+        
+        .error-container p {
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <h1>Portofolio Saya</h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="{{ url_for('index') }}">Beranda</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    
+    <div class="error-container">
+        <h1 class="error-code">500</h1>
+        <h2 class="error-message">Server Error</h2>
+        <p>Maaf, terjadi kesalahan pada server. Silakan coba lagi nanti.</p>
+        <a href="{{ url_for('index') }}" class="btn">Kembali ke Beranda</a>
+    </div>
+    
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Portofolio Saya. All Rights Reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>
